@@ -7,7 +7,8 @@ const nav = [
   { href: base + 'biography/', label: 'About', key: 'about' },
   { href: base + 'blog/', label: 'Journal', key: 'journal' }
 ];
-const canonical = new URL(Astro.url.pathname.replace(/^\\/Kastineaugak-kesug-website\\//, '/'), 'https://kastineaugak.kesug.com').toString();
+const canonicalPath = Astro.url.pathname.startsWith(base) ? '/' + Astro.url.pathname.slice(base.length) : Astro.url.pathname;
+const canonical = new URL(canonicalPath, 'https://kastineaugak.kesug.com').toString();
 ---
 <!doctype html>
 <html lang="en">
