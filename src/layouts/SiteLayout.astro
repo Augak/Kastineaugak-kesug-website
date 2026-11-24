@@ -1,0 +1,89 @@
+---
+const { title = 'Kastine Augak — Technology, Innovation & Digital Media', description = 'The personal and professional home of Kastine Augak: technology, innovation, research, digital media and community.', active = 'home' } = Astro.props;
+const nav = [
+  { href: '/', label: 'Home', key: 'home' },
+  { href: '/biography/', label: 'About', key: 'about' },
+  { href: '/blog/', label: 'Journal', key: 'journal' }
+];
+const canonical = new URL(Astro.url.pathname, 'https://kastineaugak.kesug.com').toString();
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b0d1a" />
+    <meta name="description" content={description} />
+    <meta name="author" content="Kastine Augak" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Kastine Augak" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="nav-wrap">
+        <a class="wordmark" href="/" aria-label="Kastine Augak home"><span class="mark">KA</span><span>KASTINE AUGAK<small>TECHNOLOGY · INNOVATION · MEDIA</small></span></a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Toggle navigation</span><span></span><span></span></button>
+        <nav id="site-nav" class="site-nav" aria-label="Main navigation">
+          {nav.map((item) => <a href={item.href} class:list={{ active: active === item.key }}>{item.label}</a>)}
+          <a class="nav-contact" href="mailto:kastineaugak@gmail.com">Contact <span aria-hidden="true">↗</span></a>
+        </nav>
+      </div>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div><a class="footer-brand" href="/">Kastine Augak</a><p>Ideas, technology and practical digital work from Uganda.</p></div>
+        <div class="footer-links"><a href="/biography/">About</a><a href="/blog/">Journal</a><a href="/privacy/">Privacy</a><a href="mailto:kastineaugak@gmail.com">Email</a></div>
+        <p class="copyright">© {new Date().getFullYear()} Kastine Augak. All rights reserved.</p>
+      </div>
+    </footer>
+    <button class="phone-help" id="phone-help" type="button" aria-expanded="false" aria-controls="phone-panel">Using a basic phone?</button>
+    <aside class="phone-panel" id="phone-panel" hidden aria-label="Low-data browsing tips">
+      <button class="panel-close" type="button" aria-label="Close">×</button>
+      <strong>Keep it simple</strong>
+      <p>This site is designed to work on smaller screens and slower connections. Turn off images or use your browser’s data-saver mode if needed.</p>
+    </aside>
+    <div class="cookie-notice" id="cookie-notice" hidden role="region" aria-label="Privacy notice">
+      <p>This site uses essential browser storage to remember your privacy choice and local interactions. <a href="/privacy/">Read the privacy note</a>.</p>
+      <button id="cookie-accept" type="button">Got it</button>
+    </div>
+    <script>
+      const toggle = document.querySelector('.menu-toggle');
+      const navEl = document.querySelector('#site-nav');
+      toggle?.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') !== 'true';
+        toggle.setAttribute('aria-expanded', String(open));
+        navEl?.classList.toggle('is-open', open);
+      });
+      const notice = document.querySelector('#cookie-notice');
+      try {
+        if (!localStorage.getItem('ka-privacy-choice')) notice.hidden = false;
+        document.querySelector('#cookie-accept')?.addEventListener('click', () => {
+          localStorage.setItem('ka-privacy-choice', 'accepted');
+          notice.hidden = true;
+        });
+      } catch { if (notice) notice.hidden = false; }
+      const phoneButton = document.querySelector('#phone-help');
+      const phonePanel = document.querySelector('#phone-panel');
+      phoneButton?.addEventListener('click', () => {
+        const open = phoneButton.getAttribute('aria-expanded') !== 'true';
+        phoneButton.setAttribute('aria-expanded', String(open));
+        phonePanel.hidden = !open;
+      });
+      document.querySelector('.panel-close')?.addEventListener('click', () => {
+        phonePanel.hidden = true; phoneButton?.setAttribute('aria-expanded', 'false');
+      });
+    </script>
+  </body>
+</html>
