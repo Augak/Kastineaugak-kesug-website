@@ -1,12 +1,10 @@
-name: Build and publish review preview
+name: Build review package
 on:
   push:
     branches: [site-refresh]
   workflow_dispatch:
 permissions:
   contents: read
-  pages: write
-  id-token: write
 concurrency:
   group: pages-preview
   cancel-in-progress: true
@@ -15,10 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -26,15 +20,8 @@ jobs:
       - run: npm run build
         env:
           BASE_PATH: /Kastineaugak-kesug-website/
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
+          name: kastineaugak-review-build
           path: dist
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          retention-days: 14
