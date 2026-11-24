@@ -1,11 +1,13 @@
 ---
+import '../styles/global.css';
+const base = import.meta.env.BASE_URL;
 const { title = 'Kastine Augak — Technology, Innovation & Digital Media', description = 'The personal and professional home of Kastine Augak: technology, innovation, research, digital media and community.', active = 'home' } = Astro.props;
 const nav = [
-  { href: '/', label: 'Home', key: 'home' },
-  { href: '/biography/', label: 'About', key: 'about' },
-  { href: '/blog/', label: 'Journal', key: 'journal' }
+  { href: base, label: 'Home', key: 'home' },
+  { href: base + 'biography/', label: 'About', key: 'about' },
+  { href: base + 'blog/', label: 'Journal', key: 'journal' }
 ];
-const canonical = new URL(Astro.url.pathname, 'https://kastineaugak.kesug.com').toString();
+const canonical = new URL(Astro.url.pathname.replace(/^\\/Kastineaugak-kesug-website\\//, '/'), 'https://kastineaugak.kesug.com').toString();
 ---
 <!doctype html>
 <html lang="en">
@@ -16,8 +18,8 @@ const canonical = new URL(Astro.url.pathname, 'https://kastineaugak.kesug.com').
     <meta name="description" content={description} />
     <meta name="author" content="Kastine Augak" />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href={base + 'favicon.svg'} />
+    <link rel="manifest" href={base + 'site.webmanifest'} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Kastine Augak" />
     <meta property="og:title" content={title} />
@@ -32,7 +34,7 @@ const canonical = new URL(Astro.url.pathname, 'https://kastineaugak.kesug.com').
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
       <div class="nav-wrap">
-        <a class="wordmark" href="/" aria-label="Kastine Augak home"><span class="mark">KA</span><span>KASTINE AUGAK<small>TECHNOLOGY · INNOVATION · MEDIA</small></span></a>
+        <a class="wordmark" href={base} aria-label="Kastine Augak home"><span class="mark">KA</span><span>KASTINE AUGAK<small>TECHNOLOGY · INNOVATION · MEDIA</small></span></a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Toggle navigation</span><span></span><span></span></button>
         <nav id="site-nav" class="site-nav" aria-label="Main navigation">
           {nav.map((item) => <a href={item.href} class:list={{ active: active === item.key }}>{item.label}</a>)}
@@ -43,8 +45,8 @@ const canonical = new URL(Astro.url.pathname, 'https://kastineaugak.kesug.com').
     <main id="main"><slot /></main>
     <footer class="site-footer">
       <div class="footer-inner">
-        <div><a class="footer-brand" href="/">Kastine Augak</a><p>Ideas, technology and practical digital work from Uganda.</p></div>
-        <div class="footer-links"><a href="/biography/">About</a><a href="/blog/">Journal</a><a href="/privacy/">Privacy</a><a href="mailto:kastineaugak@gmail.com">Email</a></div>
+        <div><a class="footer-brand" href={base}>Kastine Augak</a><p>Ideas, technology and practical digital work from Uganda.</p></div>
+        <div class="footer-links"><a href={base + 'biography/'}>About</a><a href={base + 'blog/'}>Journal</a><a href={base + 'privacy/'}>Privacy</a><a href="mailto:kastineaugak@gmail.com">Email</a></div>
         <p class="copyright">© {new Date().getFullYear()} Kastine Augak. All rights reserved.</p>
       </div>
     </footer>
@@ -55,7 +57,7 @@ const canonical = new URL(Astro.url.pathname, 'https://kastineaugak.kesug.com').
       <p>This site is designed to work on smaller screens and slower connections. Turn off images or use your browser’s data-saver mode if needed.</p>
     </aside>
     <div class="cookie-notice" id="cookie-notice" hidden role="region" aria-label="Privacy notice">
-      <p>This site uses essential browser storage to remember your privacy choice and local interactions. <a href="/privacy/">Read the privacy note</a>.</p>
+      <p>This site uses essential browser storage to remember your privacy choice. <a href={base + 'privacy/'}>Read the privacy note</a>.</p>
       <button id="cookie-accept" type="button">Got it</button>
     </div>
     <script>
